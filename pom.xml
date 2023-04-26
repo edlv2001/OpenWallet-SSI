@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>OpenSSIWallet</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>19</maven.compiler.source>
+        <maven.compiler.target>19</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>danubetech-maven-public</id>
+            <url>https://repo.danubetech.com/repository/maven-public/</url>
+        </repository>
+
+        <repository>
+            <id>mavenCentral</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+
+        <repository>
+            <id>bintray</id>
+            <url>https://jcenter.bintray.com</url>
+        </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+
+        <repository>
+            <id>waltid</id>
+            <url>https://maven.walt.id/repository/waltid/</url>
+        </repository>
+
+        <repository>
+            <id>waltid-ssi-kit</id>
+            <url>https://maven.walt.id/repository/waltid-ssi-kit/</url>
+        </repository>
+
+        <repository>
+            <id>danubetech</id>
+            <url>https://repo.danubetech.com/repository/maven-public/</url>
+        </repository>
+
+    </repositories>
+
+
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>none</groupId>
+            <artifactId>none</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/BIP39.main.jar</systemPath>
+        </dependency>
+
+        <!-- walt.id -->
+        <dependency>
+            <groupId>id.walt</groupId>
+            <artifactId>waltid-ssi-kit</artifactId>
+            <version>1.13.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>id.walt.servicematrix</groupId>
+            <artifactId>WaltID-ServiceMatrix</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>decentralized-identity</groupId>
+            <artifactId>did-common-java</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>id.walt</groupId>
+            <artifactId>waltid-ssikit-vclib</artifactId>
+            <version>1.23.5</version>
+        </dependency>
+
+        <!-- JSON -->
+        <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>klaxon</artifactId>
+            <version>5.6</version>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>io.github.microutils</groupId>
+            <artifactId>kotlin-logging-jvm</artifactId>
+            <version>2.1.23</version>
+        </dependency>
+
+        <dependency>
+            <groupId>decentralized-identity</groupId>
+            <artifactId>uni-resolver-local</artifactId>
+            <version>0.10-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Kotlin -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>1.7.10</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.danubetech</groupId>
+            <artifactId>verifiable-credentials-java</artifactId>
+            <version>1.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>9.31</version>
+        </dependency>
+        <dependency>
+            <groupId>io.fusionauth</groupId>
+            <artifactId>fusionauth-jwt</artifactId>
+            <version>5.2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>decentralized-identity</groupId>
+            <artifactId>uni-resolver-client</artifactId>
+            <version>0.10-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.java-json-tools</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>2.2.14</version>
+        </dependency>
+
+
+    </dependencies>
+
+</project>
