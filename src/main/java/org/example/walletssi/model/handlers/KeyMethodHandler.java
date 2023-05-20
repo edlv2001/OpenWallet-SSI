@@ -1,27 +1,46 @@
 package org.example.walletssi.model.handlers;
 
-import foundation.identity.did.DID;
 import foundation.identity.did.DIDDocument;
-import io.ipfs.multibase.Base58;
 import io.ipfs.multibase.Multibase;
-import org.example.walletssi.model.DIDResolver;
-import org.example.walletssi.model.DidMethodHandler;
+import org.didcommx.didcomm.diddoc.DIDDocResolver;
+import org.example.walletssi.model.handlers.config.DefaultMethodHandlerConfig;
+import org.example.walletssi.model.handlers.config.DidMethodHandlerConfig;
 import uniresolver.ResolutionException;
 import uniresolver.client.ClientUniResolver;
-import uniresolver.driver.AbstractDriver;
-import uniresolver.driver.Driver;
-import uniresolver.local.LocalUniResolver;
 import uniresolver.result.ResolveDataModelResult;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.security.PublicKey;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class KeyMethodHandler implements DidMethodHandler {
+    private File dir;
 
-    public String genDid(PublicKey publicKey){
+    byte[] multicodecEd25519Bytes = ByteBuffer.allocate(2).putShort((short) 0xED01).array();
+
+    byte[] multicodecRSABytes = ByteBuffer.allocate(2).putShort((short) 0xED01).array();
+
+    byte[] multicodecBytes = ByteBuffer.allocate(2).putShort((short) 0xED01).array();
+
+    byte[] multicodecExampleBytes = ByteBuffer.allocate(2).putShort((short) 0xED01).array();
+
+
+    public KeyMethodHandler(){
+        this("data/did/created");
+    }
+    public KeyMethodHandler(String path){
+        this.dir = new File(path);
+    }
+
+    public KeyMethodHandler(DefaultMethodHandlerConfig config){
+        this.dir = new File(config.getDidStorePath());
+        if(!dir.isDirectory() || !dir.canRead() || !dir.canWrite()){
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public String genDID(PublicKey publicKey){
         byte[] publicKeyBytes = publicKey.getEncoded();
         byte[] multicodecEd25519Bytes = ByteBuffer.allocate(2).putShort((short) 0xED01).array();
         byte[] publicKeyWithMulticodec = new byte[multicodecEd25519Bytes.length + publicKeyBytes.length];
@@ -29,7 +48,12 @@ public class KeyMethodHandler implements DidMethodHandler {
         System.arraycopy(publicKeyBytes, 0, publicKeyWithMulticodec, multicodecEd25519Bytes.length, publicKeyBytes.length);
 
         String multibasePublicKey = Multibase.encode(Multibase.Base.Base58BTC, publicKeyWithMulticodec);
-        return "did:key:" + multibasePublicKey;
+
+
+        String did = "did:key:" + multibasePublicKey;
+        System.out.println(did);
+        this.storeDID(did, generateDidDocument(did));
+        return did;
 
         //return "did:key:" + Base58.encode(publicKey.getEncoded());
     }
@@ -59,4 +83,35 @@ public class KeyMethodHandler implements DidMethodHandler {
 
         return didDocument.toJson(true);
     }
+
+    @Override
+    public DIDDocument resolveDID(String did) {
+        ClientUniResolver uniResolver = new ClientUniResolver();
+        uniResolver.setResolveUri("https://dev.uniresolver.io/1.0/identifiers");
+        ResolveDataModelResult result = null;
+        try {
+            result = uniResolver.resolve(did);
+        } catch (ResolutionException e) {
+            throw new RuntimeException(e);
+        }
+        return result.getDidDocument();
+    }
+
+    @Override
+    public String getDIDMethod() {
+        return "key";
+    }
+
+    @Override
+    public DIDDocResolver getResolver() {
+        return null;
+    }
+
+    @Override
+    public File getDir() {
+        return dir;
+    }
+
+    public Class<?> getConfigClass(){ return DefaultMethodHandlerConfig.class; }
+
 }

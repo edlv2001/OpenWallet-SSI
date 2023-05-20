@@ -3,23 +3,41 @@ package org.example.walletssi;
 import com.danubetech.keyformats.crypto.ByteSigner;
 import com.danubetech.keyformats.crypto.impl.Ed25519_EdDSA_PrivateKeySigner;
 import com.danubetech.verifiablecredentials.VerifiableCredential;
+import com.danubetech.verifiablecredentials.VerifiablePresentation;
 import com.danubetech.verifiablecredentials.jwt.JwtVerifiableCredential;
 import com.danubetech.verifiablecredentials.jwt.ToJwtConverter;
+import com.google.crypto.tink.subtle.Hex;
 import com.nimbusds.jose.JOSEException;
+import foundation.identity.did.DIDDocument;
 import id.walt.crypto.Key;
 
 import id.walt.services.keystore.KeyStoreService;
 import id.walt.signatory.*;
 import io.github.novacrypto.bip39.*;
 
-import java.math.BigInteger;
+import java.io.File;
 import java.security.*;
-import java.util.List;
+import java.util.*;
 
+import org.didcommx.didcomm.DIDComm;
+import org.didcommx.didcomm.message.Message;
+import org.didcommx.didcomm.model.PackPlaintextParams;
+import org.didcommx.didcomm.model.PackPlaintextResult;
+import org.didcommx.didcomm.model.UnpackParams;
+import org.didcommx.didcomm.model.UnpackResult;
+import org.example.walletssi.init.WalletConfiguration;
 import org.example.walletssi.key.KeyHandler;
 import org.example.walletssi.key.KeyHandlerEd25519;
+import org.example.walletssi.key.secret.SecretResolverDefault;
+import org.example.walletssi.key.utils.KeyUtils;
+import org.example.walletssi.model.DidMethod;
+import org.example.walletssi.model.handlers.DidMethodHandler;
 import org.example.walletssi.model.handlers.EBSIMethodHandler;
 import org.example.walletssi.model.handlers.KeyMethodHandler;
+import org.example.walletssi.model.vc.VerifiableCredentialIssuer;
+import org.example.walletssi.model.vc.VerifiableCredentialVerifier;
+import org.example.walletssi.model.vc.VerifiablePresentationCreator;
+import org.example.walletssi.model.vc.VerifiablePresentationVerifier;
 
 public class Wallet {
 
@@ -27,34 +45,35 @@ public class Wallet {
     //private final KeyStoreService keyService = EncryptedKeyStore.Companion.getService();
     //private final ServiceMatrix serviceMatrix= new ServiceMatrix("service-matrix.properties");
 
-    private KeyHandler keyHandler = new KeyHandlerEd25519("./data/key");
-
-    private EBSIMethodHandler ebsiMethodHandler = new EBSIMethodHandler();
-
-    private KeyMethodHandler keyMethodHandler = new KeyMethodHandler();
+    private KeyHandler keyHandler;
 
 
-    public Wallet(){}
+    private DidMethodHandler didMethodHandler;
 
-    public Wallet(String keyStorePath){
-        //KeyId keyId = generateKey();
-        //generateKey();
-        //KeyPair keyPair = selectKey(keyService.listKeys());
+    private VerifiableCredentialIssuer vcIssuer;
 
-        //System.out.println(keyPair.getPrivate());
-        //System.out.println("keyID :" + keyId);
-        //System.out.println("component1: " + keyId.component1());
+    private VerifiableCredentialVerifier vcVerifier;
 
-       // keyService.addAlias();
+    private VerifiablePresentationCreator vpCreator;
+
+    private VerifiablePresentationVerifier vpVerifier;
+
+    private DIDComm didComm;
+
+    private WalletConfiguration walletConfiguration;
 
 
+    public Wallet(WalletConfiguration config){
+        this.walletConfiguration = config;
+        this.didMethodHandler = DidMethod.getHandler(config.getDidMethod(), config.getDidMethodHandlerConfig());
 
+        keyHandler = new KeyHandlerEd25519(config.getKeyStorePath());
+        vcIssuer = new VerifiableCredentialIssuer();
+        vcVerifier = new VerifiableCredentialVerifier();
+        vpCreator = new VerifiablePresentationCreator();
+        vpVerifier = new VerifiablePresentationVerifier();
 
     }
-
-
-
-
 
     /*
     public void genKey(String passphrase){
@@ -220,7 +239,7 @@ public class Wallet {
 
 
     public String genKey(String alias, String password){
-        return genKey("","alias", password);
+        return genKey("", alias, password);
     }
 
     public String genKey(String passphrase, String alias, String password){
@@ -236,50 +255,53 @@ public class Wallet {
                         keyHandler.generateSeed(mnemonic, passphrase)
                 ), alias, password
         );*/
-        System.out.println(this.ebsiMethodHandler.genDID(keyPair.getPublic()));
-        String did = this.keyMethodHandler.genDid(keyPair.getPublic());
+        /*System.out.println(this.ebsiMethodHandler.genDID(keyPair.getPublic()));
+
+        List<String> dids = ebsiMethodHandler.listDids();
+        for(int i = 0; i < dids.size(); i++){
+            System.out.println(ebsiMethodHandler.getDidDoc(dids.get(i)));
+        }*/
+        //String did = this.keyMethodHandler.genDID(keyPair.getPublic());
         //System.out.println(did);
         //System.out.println(this.keyMethodHandler.generateDidDocument(did));
         return mnemonic;
     }
 
-    public String getKeys(String alias, String password){
-        this.keyHandler.obtainKey(alias, password);
-        return null;
+    public boolean recoverPassword(String alias, String newPassword, String mnemonic){
+        return recoverPassword(alias, newPassword, mnemonic, "");
+    }
+
+    public boolean recoverPassword(String alias, String newPassword, String mnemonic, String passphrase){
+        KeyPair keyPair = this.keyHandler.generateKeys(
+                keyHandler.generateSeed(mnemonic, passphrase)
+        );
+
+
+        System.out.println("Public: " + Hex.encode(keyPair.getPublic().getEncoded()));
+        System.out.println("Private: " + Hex.encode(keyPair.getPrivate().getEncoded()));
+
+        return keyHandler.recoverKey(keyPair, alias, newPassword);
+    }
+
+
+    public String genDID(PublicKey publicKey){
+        return this.didMethodHandler.genDID(publicKey);
+    }
+
+    public KeyPair getKeys(String alias, String password){
+        return this.keyHandler.obtainKey(alias, password);
     }
 
     private byte[] generateSeed(String mnemonic, String passphrase){
         return new SeedCalculator(JavaxPBKDF2WithHmacSHA512.INSTANCE).calculateSeed(mnemonic, passphrase);
     }
 
-    public String signJWT(VerifiableCredential vc, byte[] privateKey, byte[] publicKey){
-        byte[] signData = new byte[64];
-        System.arraycopy(privateKey, 0, signData, 0, 32);
-        System.arraycopy(publicKey, 0, signData, 32, 32);
-        ByteSigner byteSigner = new Ed25519_EdDSA_PrivateKeySigner(signData);
-
-        JwtVerifiableCredential jwtVerifiableCredential = ToJwtConverter.toJwtVerifiableCredential(vc);
-        String jwtPayload = jwtVerifiableCredential.getPayload().toString();
-        System.out.println(jwtPayload);
-
-        String jwtString = null;
-        try {
-            //jwtString = jwtVerifiableCredential.sign_Ed25519_EdDSA(testEd25519PrivateKey);
-            jwtString = jwtVerifiableCredential.sign_Ed25519_EdDSA(byteSigner);
-        } catch (JOSEException e) {
-            throw new RuntimeException(e);
-        }
-        return jwtString;
-    }
 
 
 
 
 
 
-    private void storekey(String path, String password, KeyPair kp){
-
-    }
 
     /*public void validateKeys(byte[] privateKey, byte[] publicKey){
         RSAPrivateCrtKeyImpl rsaPrivateKey = (RSAPrivateCrtKeyImpl)privateKey;
@@ -293,13 +315,9 @@ public class Wallet {
 
     }*/
 
-    private void genPublicKey(){
 
-    }
 
-    public void generateDIDEBSI(PublicKey publicKey){
-        System.out.println(this.ebsiMethodHandler.genDID(publicKey));
-    }
+
 
     /*public void run(){
         new ServiceMatrix("service-matrix.properties");
@@ -360,42 +378,69 @@ public class Wallet {
     }
     */
 
-/*
-    public KeyId generateKey(){
-        //keyService.store(new Key(keyService1.generate(KeyAlgorithm.EdDSA_Ed25519), KeyAlgorithm.EdDSA_Ed25519, CryptoProvider.SUN));
-
-        return keyService.generate(KeyAlgorithm.EdDSA_Ed25519);
-    }
-
-    public String generateDid(id.walt.model.DidMethod method, KeyId keyId){
-        return DidService.INSTANCE.create(method, keyId.getId(), null);
-    }
-
-    /*public String generateDid(id.walt.model.DidMethod method){
-        return generateDid(method, generateKey());
-    }*/
-
-
-    public KeyPair selectKey(List<Key> listKeys){
-        System.out.println(KeyStoreService.Companion.getService().listKeys().get(0).getKeyPair().getPrivate());
-        return null;
-        /*Key key = keyService.load(HKVKeyStoreService.Companion.getService().listKeys().get(0).getKeyId().getId());
-
-        System.out.println(
-                keyService.export(HKVKeyStoreService.Companion.getService().listKeys().get(0).getPublicKeyBytes().toString(), KeyFormat.PEM, KeyType.PRIVATE)
-        );
-        System.out.println(HKVKeyStoreService.Companion.getService().listKeys().size());
-        System.out.println( HKVKeyStoreService.Companion.getService().listKeys().get(0).getKeyId());
-        return HKVKeyStoreService.Companion.getService().listKeys().get(0).getKeyPair();*/
-        //return listKeys.get(0).getKeyPair();
-    }
-
-
     public ProofConfig createProofConfig(String issuerDid, String subjectDid, ProofType proofType, String dataProviderIdentifier) {
         return new ProofConfig(issuerDid, subjectDid, null, null, proofType, null, null,
                 null, null, null, null, null, dataProviderIdentifier, null , null, Ecosystem.DEFAULT  );
     }
 
+    public PackPlaintextResult createMessage(Map<String, ? extends  Object> claims, String type){
+        Message message = Message.Companion.builder(
+                UUID.randomUUID().toString(),
+                claims,
+                type
+        ).build();
 
+        PackPlaintextParams packPlaintextParams = new PackPlaintextParams(message, null, didMethodHandler.getResolver(), new SecretResolverDefault(this.keyHandler));
+        PackPlaintextResult packPlaintextResult = didComm.packPlaintext(packPlaintextParams);
+        return packPlaintextResult;
+    }
+
+    public void sendMessage(){
+
+    }
+
+    public Object processMessage(PackPlaintextResult message){
+        UnpackResult result = didComm.unpack(new UnpackParams.Builder(message.getPackedMessage()).build());
+
+        return null;
+    }
+
+    public String issueVC(Map<String, Object> claims, String didIssuer, KeyPair keyPair, String didSubject, Date expirationDate){
+        DIDDocument didDocument = DIDDocument.fromJson(this.didMethodHandler.getDidDoc(didIssuer));
+        System.out.println(didDocument.toJson(true));
+        VerifiableCredential vc = vcIssuer.issue(claims, didIssuer, didSubject, keyPair, expirationDate);
+        String signed = vcIssuer.signVC(vc, keyPair, didIssuer, didDocument);
+        System.out.println(signed);
+
+        return signed;
+
+    }
+
+    public boolean verifyVC(String vc){
+        return this.vcVerifier.verify(vc);
+    }
+
+    public boolean verifyVCWithoutRegistry(String vc){
+        return this.vcVerifier.verifyWithoutRegistry(vc, walletConfiguration.getDidMethodHandlerConfig());
+    }
+
+    public String issueVP(String vc, String didHolder, KeyPair keyPair, Date expirationDate){
+        DIDDocument didDocument = DIDDocument.fromJson(this.didMethodHandler.getDidDoc(didHolder));
+
+        VerifiablePresentation vp = vpCreator.issueVP(vc, didHolder);
+        String signed = vpCreator.signVP(vp, keyPair, didHolder, didDocument);
+
+
+        return signed;
+
+    }
+
+    public boolean verifyVP(String vp){
+        return this.vpVerifier.verify(vp);
+    }
+
+    public boolean verifyVPWithoutRegistry(String vp){
+        return this.vpVerifier.verifyWithoutRegistry(vp, walletConfiguration.getDidMethodHandlerConfig());
+    }
 
 }

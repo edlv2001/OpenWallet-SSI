@@ -3,7 +3,9 @@ package org.example.walletssi.key;
 import io.github.novacrypto.bip39.MnemonicGenerator;
 import io.github.novacrypto.bip39.Words;
 import io.github.novacrypto.bip39.wordlists.English;
+import org.didcommx.didcomm.common.VerificationMethodType;
 
+import java.io.File;
 import java.security.KeyPair;
 import java.security.SecureRandom;
 
@@ -27,6 +29,20 @@ public interface KeyHandler {
     public byte[] generateSeed(String mnemonic, String passphrase);
 
     public KeyPair obtainKey(String alias, String password);
+
+    public VerificationMethodType getKeyTyp();
+
+    public boolean recoverKey(KeyPair keyPair, String alias, String password);
+
+
+
+
+
+
+
+
+
+
 
 
 }

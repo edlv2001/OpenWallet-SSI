@@ -1,15 +1,8 @@
 package org.example.walletssi.key;
 
-import com.google.crypto.tink.proto.Ed25519PublicKey;
 import com.google.crypto.tink.subtle.Hex;
 import io.github.novacrypto.bip39.JavaxPBKDF2WithHmacSHA512;
 import io.github.novacrypto.bip39.SeedCalculator;
-import io.github.novacrypto.bip39.wordlists.English;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.generators.Ed25519KeyPairGenerator;
-import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
-import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.util.test.FixedSecureRandom;
 import org.didcommx.didcomm.common.VerificationMethodType;
 import org.example.walletssi.key.exception.IncorrectPasswordException;
@@ -32,33 +25,38 @@ import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECParameterSpec;
 import java.security.spec.ECPoint;
 import java.security.spec.KeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
+
 import java.util.*;
 
-public class KeyHandlerEd25519 implements KeyHandler{
+public class KeyHandlerRSA implements KeyHandler{
 
     private final static String[] fileNames = {"aliases", "enc-privkey", "enc-pubkey", "meta"};
     private File dir;
 
-    public KeyHandlerEd25519(String path){
+    public KeyHandlerRSA(String path){
         this.dir = new File(path);
         if(!dir.isDirectory() || !dir.canRead() || !dir.canWrite()){
             throw new IllegalArgumentException();
         }
     }
 
-    public KeyHandlerEd25519(){
+    public KeyHandlerRSA(){
         this("./data/key");
         //this("." + File.pathSeparator + "data");
     }
 
     public KeyPair generateKeys(byte[] seed) {
-        Ed25519KeyPairGenerator keyPairGenerator = new Ed25519KeyPairGenerator();
-        keyPairGenerator.init(new Ed25519KeyGenerationParameters(new FixedSecureRandom(seed)));
-        AsymmetricCipherKeyPair pair = keyPairGenerator.generateKeyPair();
-        byte[] privateKey = ((Ed25519PrivateKeyParameters) pair.getPrivate()).getEncoded();
-        byte[] publicKey = ((Ed25519PublicKeyParameters) pair.getPublic()).getEncoded();
+        try {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048, new FixedSecureRandom(seed));
+            return keyPairGenerator.generateKeyPair();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 
-        return new KeyPair(new PublicKeyEd25519(publicKey), new PrivateKeyEd25519(privateKey));
+        return null;
     }
 
     @Override
@@ -91,10 +89,17 @@ public class KeyHandlerEd25519 implements KeyHandler{
         for(File file: fileList){
             if(file.getName().endsWith(alias) && validDir(file.getPath())){
                 try {
-                    return new KeyPair(
-                            new PublicKeyEd25519(desencriptarClavePrivada(password.toCharArray(), getEncryptedKey(file.getPath() + "\\enc-pubkey", "public"))),
-                            new PrivateKeyEd25519(desencriptarClavePrivada(password.toCharArray(), getEncryptedKey(file.getPath() + "\\enc-privkey", "private")))
-                            );
+                    byte[] encryptedPublicKey = getEncryptedKey(file.getPath() + "\\enc-pubkey", "public");
+                    byte[] encryptedPrivateKey = getEncryptedKey(file.getPath() + "\\enc-privkey", "private");
+
+                    byte[] decryptedPublicKeyBytes = desencriptarClavePrivada(password.toCharArray(), encryptedPublicKey);
+                    byte[] decryptedPrivateKeyBytes = desencriptarClavePrivada(password.toCharArray(), encryptedPrivateKey);
+
+                    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+                    PublicKey publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(decryptedPublicKeyBytes));
+                    PrivateKey privateKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(decryptedPrivateKeyBytes));
+
+                    return new KeyPair(publicKey, privateKey);
                 } catch(Exception e){
                     throw new IncorrectPasswordException();
                 }
@@ -128,7 +133,7 @@ public class KeyHandlerEd25519 implements KeyHandler{
     }
 
     public VerificationMethodType getKeyTyp(){
-        return VerificationMethodType.ED25519_VERIFICATION_KEY_2018;
+        return VerificationMethodType.JSON_WEB_KEY_2020;
     }
 
     public ArrayList<String> listAlias(){
@@ -160,7 +165,7 @@ public class KeyHandlerEd25519 implements KeyHandler{
         try {
             Scanner sc = new Scanner(f);
             String line = sc.nextLine();
-            return line.equals("EdDSA_Ed25519") && !sc.hasNext();
+            return line.equals("RSA") && !sc.hasNext();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -212,7 +217,7 @@ public class KeyHandlerEd25519 implements KeyHandler{
         createFile(alias, "aliases", newDir);
         createFile(encryptPrivateKey(password, keyPair.getPrivate()), "enc-privkey", newDir);
         createFile(encryptPublicKey(password, keyPair.getPublic()), "enc-pubkey", newDir);
-        createFile("EdDSA_Ed25519", "meta", newDir);
+        createFile("RSA", "meta", newDir);
     }
 
     private void createFile(String content, String fileName, File dir){
@@ -275,65 +280,6 @@ public class KeyHandlerEd25519 implements KeyHandler{
         cipher.init(Cipher.DECRYPT_MODE, secret, ivspec);
         return cipher.doFinal(clavePrivadaEncriptada);
     }
-
-    public static class PublicKeyEd25519 implements java.security.PublicKey {
-        byte[] key;
-
-        public PublicKeyEd25519(byte[] key){
-            this.key = key;
-        }
-
-        @Override
-        public String getAlgorithm() {
-            return "EC";
-        }
-
-        @Override
-        public String getFormat() {
-            return null;
-        }
-
-        @Override
-        public byte[] getEncoded() {
-            return key;
-        }
-/*
-        @Override
-        public ECPoint getW() {
-            ECPoint ecPoint = new ECPoint(BigInteger.valueOf(0),BigInteger.valueOf(0));
-            return ecPoint;
-        }
-
-        @Override
-        public ECParameterSpec getParams() {
-            ECParameterSpec ecParameterSpec = new ECParameterSpec();
-            return null;
-        }*/
-    }
-
-    public static class PrivateKeyEd25519 implements java.security.PrivateKey{
-        byte[] key;
-
-        public PrivateKeyEd25519(byte[] key){
-            this.key = key;
-        }
-
-        @Override
-        public String getAlgorithm() {
-            return "EC";
-        }
-
-        @Override
-        public String getFormat() {
-            return null;
-        }
-
-        @Override
-        public byte[] getEncoded() {
-            return key;
-        }
-    }
-
 
 
     public static String generateJWKThumbprint(byte[] publicKeyBytes) throws NoSuchAlgorithmException {

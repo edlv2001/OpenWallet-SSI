@@ -5,33 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2abc13a9-8716-4908-a455-c54fd6485ea6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fsStore.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Main2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/Wallet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/init/Credentials.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/init/DIDList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/init/WalletConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyAlgorithm.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/exception/IncorrectPasswordException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/DIDResolver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/DidMethod.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/DidMethodHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/didUtils/DIDParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/exception/UnsupportedDidMethod.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/EBSIMethodHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/ETHRMethodHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/KeyMethodHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialIssuer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialVerifier.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerRSA.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/secret/SecretResolverDefault.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/utils/KeyUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/didUtils/DIDDocImp.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/didUtils/DIDDocUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/exception/UnsupportedKeyAlgorithm.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/config/DefaultMethodHandlerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/config/DidMethodHandlerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/config/EBSIMethodHandlerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/resolver/EBSIDIDDocResolver.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiablePresentationCreator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiablePresentationVerifier.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/signature/Signature.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/signature/VerifySignature.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/oidc/OIDC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/Wallet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/Wallet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/init/Credentials.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/init/DIDList.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/init/WalletConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/init/WalletConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/DIDResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/resolver/DIDResolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/DidMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/DidMethod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/DidMethodHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/DidMethodHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/EBSIMethodHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/EBSIMethodHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/ETHRMethodHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/ETHRMethodHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/KeyMethodHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/KeyMethodHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialIssuer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialIssuer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialVerifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialVerifier.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +48,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="Kotlin Class" />
         <option value="Enum" />
         <option value="Class" />
       </list>
@@ -68,18 +75,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/edlv2/IdeaProjects/Issuer3Attempt",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.general"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/edlv2/IdeaProjects/Issuer3Attempt&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\edlv2\IdeaProjects\Issuer3Attempt" />
@@ -99,6 +106,8 @@
       </method>
     </configuration>
     <configuration name="Main2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="16" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="org.example.Main2" />
       <module name="OpenSSIWallet" />
       <extension name="coverage">
@@ -111,6 +120,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.Main2" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main2" />
@@ -206,22 +219,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java</url>
-          <line>209</line>
+          <line>231</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java</url>
-          <line>218</line>
+          <line>240</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java</url>
-          <line>157</line>
-          <option name="timeStamp" value="47" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java</url>
-          <line>165</line>
+          <line>182</line>
           <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -258,6 +266,24 @@
           <url>jar://$MAVEN_REPOSITORY$/decentralized-identity/uni-resolver-local/0.10-SNAPSHOT/uni-resolver-local-0.10-20230416.181647-10.jar!/uniresolver/local/LocalUniResolver.class</url>
           <line>178</line>
           <option name="timeStamp" value="66" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/DidMethodHandler.java</url>
+          <line>26</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="72" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/DidMethodHandler.java</url>
+          <line>28</line>
+          <option name="timeStamp" value="73" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/walletssi/Wallet.java</url>
+          <line>249</line>
+          <option name="timeStamp" value="80" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.util.ServiceConfigurationError" package="java.util" />
