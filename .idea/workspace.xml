@@ -4,41 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2abc13a9-8716-4908-a455-c54fd6485ea6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerRSA.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/secret/SecretResolverDefault.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/utils/KeyUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/didUtils/DIDDocImp.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/didUtils/DIDDocUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/exception/UnsupportedKeyAlgorithm.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/config/DefaultMethodHandlerConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/config/DidMethodHandlerConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/config/EBSIMethodHandlerConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/resolver/EBSIDIDDocResolver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiablePresentationCreator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiablePresentationVerifier.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/signature/Signature.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/signature/VerifySignature.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/oidc/OIDC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/Wallet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/Wallet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/init/Credentials.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/init/DIDList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/init/WalletConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/init/WalletConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/DIDResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/resolver/DIDResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/DidMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/DidMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/DidMethodHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/DidMethodHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/EBSIMethodHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/EBSIMethodHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/ETHRMethodHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/ETHRMethodHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/KeyMethodHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/KeyMethodHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialIssuer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialIssuer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialVerifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialVerifier.java" afterDir="false" />
-    </list>
+    <list default="true" id="2abc13a9-8716-4908-a455-c54fd6485ea6" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
