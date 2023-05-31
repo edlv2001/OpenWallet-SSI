@@ -37,22 +37,22 @@ public class KeyHandlerRSA implements KeyHandler{
 
     public KeyHandlerRSA(String path){
         this.dir = new File(path);
-        if(!dir.isDirectory() || !dir.canRead() || !dir.canWrite()){
-            throw new IllegalArgumentException();
+        if(!this.dir.isDirectory())
+            this.dir.mkdirs();
+        if(!dir.canRead() || !dir.canWrite()){
+            throw new IllegalArgumentException("Sin permisos necesarios para usar el directorio " + dir);
         }
-    }
-
-    public KeyHandlerRSA(){
-        this("./data/key");
-        //this("." + File.pathSeparator + "data");
     }
 
     public KeyPair generateKeys(byte[] seed) {
         try {
+            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG", "SUN");
+            secureRandom.setSeed(seed);
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(2048, new FixedSecureRandom(seed));
-            return keyPairGenerator.generateKeyPair();
-        } catch (NoSuchAlgorithmException e) {
+            keyPairGenerator.initialize(2048, secureRandom);
+            KeyPair pair = keyPairGenerator.generateKeyPair();
+            return pair;
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -65,14 +65,9 @@ public class KeyHandlerRSA implements KeyHandler{
         File f = new File(dir, keyPath);
 
         File previous = findKeyDir(alias);
-        if(previous != null && !findKeyDir(alias).getName().equals(keyPath)) throw new RuntimeException("Alias already exists for another key");
-        /*if(validDir(f.getPath())){
+        if(previous != null && !previous.getName().equals(keyPath))
+            throw new RuntimeException("Alias already exists for another key");
 
-            createFile(encryptPrivateKey("holaxd", keyPair.getPrivate()), "enc-privkey", dir);
-            createFile(encryptPublicKey("holaxd", keyPair.getPublic()), "enc-privkey", dir);
-        } else {
-            createDir(alias, keyPair);
-        }*/
         createDir(keyPath, keyPair, password, false);
     }
 
@@ -196,23 +191,13 @@ public class KeyHandlerRSA implements KeyHandler{
 
     public byte[] generateSeed(String mnemonic, String passphrase){
         return new SeedCalculator(JavaxPBKDF2WithHmacSHA512.INSTANCE).calculateSeed(mnemonic, passphrase);
-        /*return new SeedCalculator()
-                .withWordsFromWordList(English.INSTANCE)
-                .calculateSeed(Arrays.stream(mnemonic.split(" ")).toList(), passphrase);*/
     }
 
     private void createDir(String alias, KeyPair keyPair, String password, boolean recover){
         File newDir = new File(dir.getPath() + "\\" + alias);
 
-        System.out.println("xx");
         if(!recover && !newDir.mkdir() && validDir(newDir.getPath()))
             return;
-        System.out.println("xx2");
-        File[] fileList = new File[4];
-        /*for(int i = 0; i < fileList.length; i++){
-            //fileList[i] = new File(newDir, fileNames[i]);
-            createFile();
-        }*/
 
         createFile(alias, "aliases", newDir);
         createFile(encryptPrivateKey(password, keyPair.getPrivate()), "enc-privkey", newDir);
@@ -308,7 +293,7 @@ public class KeyHandlerRSA implements KeyHandler{
     private File findKeyDir(String alias){
         File[] listFiles = dir.listFiles();
         for(File f: listFiles){
-            if(f.getName().endsWith(alias))
+            if(f.getName().matches("^[a-zA-Z0-9]{64} - " + alias))
                 return f;
         }
         return null;

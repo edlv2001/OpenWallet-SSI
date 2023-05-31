@@ -41,15 +41,13 @@ public class KeyHandlerEd25519 implements KeyHandler{
 
     public KeyHandlerEd25519(String path){
         this.dir = new File(path);
-        if(!dir.isDirectory() || !dir.canRead() || !dir.canWrite()){
-            throw new IllegalArgumentException();
+        if(!this.dir.isDirectory())
+            this.dir.mkdirs();
+        if(!dir.canRead() || !dir.canWrite()){
+            throw new IllegalArgumentException("Sin permisos necesarios para usar el directorio " + dir);
         }
     }
 
-    public KeyHandlerEd25519(){
-        this("./data/key");
-        //this("." + File.pathSeparator + "data");
-    }
 
     public KeyPair generateKeys(byte[] seed) {
         Ed25519KeyPairGenerator keyPairGenerator = new Ed25519KeyPairGenerator();
@@ -67,20 +65,15 @@ public class KeyHandlerEd25519 implements KeyHandler{
         File f = new File(dir, keyPath);
 
         File previous = findKeyDir(alias);
-        if(previous != null && !findKeyDir(alias).getName().equals(keyPath)) throw new RuntimeException("Alias already exists for another key");
-        /*if(validDir(f.getPath())){
-
-            createFile(encryptPrivateKey("holaxd", keyPair.getPrivate()), "enc-privkey", dir);
-            createFile(encryptPublicKey("holaxd", keyPair.getPublic()), "enc-privkey", dir);
-        } else {
-            createDir(alias, keyPair);
-        }*/
+        if(previous != null && !previous.getName().equals(keyPath))
+            throw new RuntimeException("Alias already exists for another key");
         createDir(keyPath, keyPair, password, false);
     }
 
     public boolean recoverKey(KeyPair keyPair, String alias, String password) {
         String keyPath = Hex.encode(KeyUtils.hashSHA256(keyPair.getPublic().getEncoded())) + " - " + alias;
         File f = new File(dir, keyPath);
+
         if(!f.exists()) return false;
         createDir(keyPath, keyPair, password, true);
         return true;
@@ -199,15 +192,8 @@ public class KeyHandlerEd25519 implements KeyHandler{
     private void createDir(String alias, KeyPair keyPair, String password, boolean recover){
         File newDir = new File(dir.getPath() + "\\" + alias);
 
-        System.out.println("xx");
         if(!recover && !newDir.mkdir() && validDir(newDir.getPath()))
             return;
-        System.out.println("xx2");
-        File[] fileList = new File[4];
-        /*for(int i = 0; i < fileList.length; i++){
-            //fileList[i] = new File(newDir, fileNames[i]);
-            createFile();
-        }*/
 
         createFile(alias, "aliases", newDir);
         createFile(encryptPrivateKey(password, keyPair.getPrivate()), "enc-privkey", newDir);
@@ -362,7 +348,7 @@ public class KeyHandlerEd25519 implements KeyHandler{
     private File findKeyDir(String alias){
         File[] listFiles = dir.listFiles();
         for(File f: listFiles){
-            if(f.getName().endsWith(alias))
+            if(f.getName().matches("^[a-zA-Z0-9]{64} - " + alias))
                 return f;
         }
         return null;

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class EBSIDIDDocResolver implements DIDDocResolver, DIDResolver {
+public class EBSIDIDDocResolver implements DIDDocResolver {
 
     private URI didRegistry;
 
@@ -39,58 +39,17 @@ public class EBSIDIDDocResolver implements DIDDocResolver, DIDResolver {
     @Override
     public Optional<DIDDoc> resolve(@NotNull String did) {
         if (!DIDParser.isValid(did, org.example.walletssi.model.DidMethod.EBSI)) {
-            return null;
+            return Optional.empty();
         }
         RestTemplate restTemplate = new RestTemplate();
-        System.out.println("didRegistry: " + didRegistry + "/did");
         ResponseEntity<String> response = restTemplate.getForEntity(didRegistry + "/did?did=" + did, String.class);
         if (response == null || response.getBody() == null || response.getBody().isEmpty()) {
-            return null;
+            return Optional.empty();
         }
-
-        System.out.println("\n\n\n\n" + response.getBody());
-
-        //DIDDoc didDoc = fromJson(response.getBody(), did);
         try {
             //DIDDocument didDocument = DIDDocument.fromJson(response.getBody());
             DIDDocImp didDocImp = DIDDocImp.Companion.fromJson(response.getBody());
             DIDDoc decodedDoc = new DIDDoc(did, didDocImp.getKeyAgreements(), didDocImp.getAuthentications(), didDocImp.getVerificationMethods(), didDocImp.getDidCommServices());
-
-            //DIDDoc decodedDoc = DIDDocParser.DIDDocDecoder.parseDIDDoc(response.getBody());
-
-
-            //DIDDoc decodedDoc = DIDDocUtils.transformDIDDoc(didDocument, did);
-
-
-           /* // Obtener la clase DIDDoc
-            Class<?> didDocClass = Class.forName("org.didcommx.didcomm.diddoc.DIDDoc");
-
-
-            for(Field f : didDocClass.getDeclaredFields()){
-                System.out.println(f.getName());
-            }
-
-            for(Class c: didDocClass.getDeclaredClasses()){
-                System.out.println(c.getName());
-            }
-
-            for(Method m: didDocClass.getDeclaredMethods()){
-                System.out.println(m.getName());
-            }
-
-            DIDDoc didDoc = new DIDDoc(null, null, null, null, null);
-            didDoc.
-            didDocClass.getDeclaredField("DIDDocDecoder").setAccessible(true);
-            // Obtener el objeto Companion de DIDDoc
-            Object didDocCompanion = didDocClass.getField("DIDDocDecoder").get(null);
-
-            // Obtener el método fromJson del objeto Companion
-            Method fromJsonMethod = didDocCompanion.getClass().getMethod("fromJson", String.class);
-
-            // Invocar el método fromJson y obtener el resultado
-            DIDDoc decodedDoc = (DIDDoc) fromJsonMethod.invoke(didDocCompanion, response.getBody());
-
-            System.out.println(decodedDoc);*/
             return Optional.of(decodedDoc);
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,8 +116,6 @@ public class EBSIDIDDocResolver implements DIDDocResolver, DIDResolver {
         if (response == null || response.getBody() == null || response.getBody().isEmpty()) {
             return null;
         }
-
-        System.out.println("\n\n\n\n" + response.getBody());
 
         DIDDocument didDocument = DIDDocument.fromJson(response.getBody());
 

@@ -10,14 +10,19 @@ import org.example.walletssi.model.didUtils.DIDParser;
 import org.example.walletssi.model.handlers.config.DidMethodHandlerConfig;
 import org.example.walletssi.model.vc.signature.VerifySignature;
 
+import static org.example.walletssi.model.vc.VerifiableCredentialVerifier.validateSchema;
+
 public class VerifiablePresentationVerifier {
-    public boolean verify(String vc){
-        //com.github.fge.jsonschema.main.JsonSchemaFactory.newBuilder().
-        return false;
+    public boolean verify(String vp, DidMethodHandlerConfig config, boolean fromTrustedRegistry){
+        VerifiablePresentation presentation = VerifiablePresentation.fromJson(vp);
+        return verify(presentation, config, fromTrustedRegistry);
     }
 
-    private String getSchema(String schema){
-        return null;
+    public boolean verify(VerifiablePresentation vp, DidMethodHandlerConfig config, boolean fromTrustedRegistry){
+        String schemaRegistry = (DidMethod.getHandler(DIDParser.parseDID(vp.getHolder().toString()), config)).getSchemaRegistry();
+        if(!validateSchema(schemaRegistry, vp, fromTrustedRegistry))
+            return false;
+        return verifyWithoutRegistry(vp, config);
     }
 
     public boolean verifyWithoutRegistry(String vp, DidMethodHandlerConfig config){
@@ -31,7 +36,11 @@ public class VerifiablePresentationVerifier {
         VerifiableCredentialVerifier verifier = new VerifiableCredentialVerifier();
         if(!verifier.verifyWithoutRegistry(credential, config))
             return false;
+        return verifyOnlyPresentation(presentation, config);
 
+    }
+
+    private boolean verifyOnlyPresentation(VerifiablePresentation presentation, DidMethodHandlerConfig config){
         String did = presentation.getHolder().toString();
         DidMethod didMethod = DIDParser.parseDID(did);
 
@@ -48,6 +57,16 @@ public class VerifiablePresentationVerifier {
                 return true;
         }
         return false;
+    }
+
+
+    public boolean verifyWithOnlyVCSchema(String vp, DidMethodHandlerConfig config, boolean fromTrustedRegistry){
+        VerifiablePresentation presentation = VerifiablePresentation.fromJson(vp);
+        VerifiableCredential credential = presentation.getVerifiableCredential();
+        VerifiableCredentialVerifier verifier = new VerifiableCredentialVerifier();
+        if(!verifier.verify(credential, config, fromTrustedRegistry))
+            return false;
+        return verifyOnlyPresentation(presentation, config);
     }
 
 }

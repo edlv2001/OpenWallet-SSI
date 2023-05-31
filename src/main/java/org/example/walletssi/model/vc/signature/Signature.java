@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
-import java.util.Arrays;
 import java.util.Date;
 
 public class Signature {
@@ -40,13 +39,14 @@ public class Signature {
         }
         if(algorithm.equals("RSA"))
             return new RsaSignature2018LdSigner(keyPair);
+        //NO SOPORTADOS EL RESTO DE FIRMAS EN ESTE MOMENTO
         return null;
     }
 
     public static String signJsonLD(JsonLDObject object, KeyPair keyPair, String did, DIDDocument didDoc){
         int nKey = -1;
         if((nKey = DIDDocUtils.findKey(didDoc, keyPair.getPublic())) == -1)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("La clave no pertenece al DID Document");
         byte[] signData = new byte[64];
         System.arraycopy(keyPair.getPrivate().getEncoded(), 0, signData, 0, 32);
         System.arraycopy(keyPair.getPublic().getEncoded(), 0, signData, 32, 32);

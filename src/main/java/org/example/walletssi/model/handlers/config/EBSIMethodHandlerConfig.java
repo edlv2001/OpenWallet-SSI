@@ -17,6 +17,8 @@ public class EBSIMethodHandlerConfig implements DidMethodHandlerConfig{
             this.didRegistry = didRegistry;
     }
 
+    public EBSIMethodHandlerConfig(){}
+
     public String getDidStorePath() {
         return didStorePath;
     }

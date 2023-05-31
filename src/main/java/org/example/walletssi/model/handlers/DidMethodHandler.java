@@ -16,12 +16,15 @@ import java.util.function.Predicate;
 public interface DidMethodHandler {
     public String genDID(PublicKey publicKey);
     public DIDDocument resolveDID(String did);
-    //public List<Did> listDIDs();
     public String getDIDMethod();
     public File getDir();
     public DIDDocResolver getResolver();
 
+    public String getDIDRegistry();
+
     public Class<?> getConfigClass();
+
+    public String getSchemaRegistry();
 
     default List<String> listDids(){
         Predicate<String> isDID = (did) -> did.matches("did%3" + getDIDMethod() + "%3.*?");
@@ -42,7 +45,7 @@ public interface DidMethodHandler {
         //return f.getName().matches("did%3" + getDIDMethod() + "%3*" );
     }
 
-    default String getDidDoc(String did){
+    default String getDidDocFromFile(String did){
         did = did.replaceFirst(":", "%3");
         did = did.replaceFirst(":", "%3");
         File f = new File(getDir(), did);

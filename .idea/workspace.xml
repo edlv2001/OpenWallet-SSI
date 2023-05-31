@@ -4,7 +4,44 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2abc13a9-8716-4908-a455-c54fd6485ea6" name="Changes" comment="" />
+    <list default="true" id="2abc13a9-8716-4908-a455-c54fd6485ea6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Main3.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/resolver/KeyDIDDocResolver.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/Holder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/Issuer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/IssuerBank.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/IssuerPolice.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/Verifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/Wallet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/Wallet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyAlgorithm.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerRSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerRSA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/utils/KeyUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/key/utils/KeyUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/DidMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/DidMethod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/didUtils/DIDDocUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/didUtils/DIDDocUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/DidMethodHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/DidMethodHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/EBSIMethodHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/EBSIMethodHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/ETHRMethodHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/KeyMethodHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/KeyMethodHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/config/DefaultMethodHandlerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/config/DefaultMethodHandlerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/config/DidMethodHandlerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/config/DidMethodHandlerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/config/EBSIMethodHandlerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/config/EBSIMethodHandlerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/resolver/DIDResolver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/resolver/EBSIDIDDocResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/resolver/EBSIDIDDocResolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialIssuer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialIssuer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialVerifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiableCredentialVerifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiablePresentationCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiablePresentationCreator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiablePresentationVerifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/VerifiablePresentationVerifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/signature/Signature.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/signature/Signature.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/signature/VerifySignature.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/walletssi/model/vc/signature/VerifySignature.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/walletssi/oidc/OIDC.java" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,13 +63,6 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="importingSettings">
-      <MavenImportingSettings>
-        <option name="workspaceImportEnabled" value="true" />
-      </MavenImportingSettings>
-    </option>
-  </component>
   <component name="ProjectId" id="2Ny1t8gJmB1KWUw37ZB1Vzba1rw" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -46,11 +76,14 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/edlv2/IdeaProjects/Issuer3Attempt&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -60,8 +93,18 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\edlv2\IdeaProjects\Issuer3Attempt\src\main\resources" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
   </component>
-  <component name="RunManager" selected="Application.Main2">
+  <component name="RunManager" selected="Application.Main (1)">
+    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="OpenSSIWallet" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="16" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -86,12 +129,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Main3" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="org.example.Main3" />
+      <module name="OpenSSIWallet" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.Main" />
+      <item itemvalue="Application.Main3" />
+      <item itemvalue="Application.Main (1)" />
       <item itemvalue="Application.Main2" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main (1)" />
         <item itemvalue="Application.Main2" />
       </list>
     </recent_temporary>
@@ -104,8 +157,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1680621720136</updated>
+      <workItem from="1684877129404" duration="207000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="UnknownFeatures">
     <option featureType="dependencySupport" implementationName="java:io.reactivex.rxjava2:rxjava" />
@@ -184,21 +241,6 @@
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java</url>
-          <line>231</line>
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java</url>
-          <line>240</line>
-          <option name="timeStamp" value="36" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/walletssi/key/KeyHandlerEd25519.java</url>
-          <line>182</line>
-          <option name="timeStamp" value="52" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>jar://$MAVEN_REPOSITORY$/io/fusionauth/fusionauth-jwt/5.2.2/fusionauth-jwt-5.2.2.jar!/io/fusionauth/jwks/JSONWebKeyBuilder.class</url>
           <line>100</line>
           <option name="timeStamp" value="57" />
@@ -235,7 +277,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/DidMethodHandler.java</url>
-          <line>26</line>
+          <line>29</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
@@ -243,13 +285,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/walletssi/model/handlers/DidMethodHandler.java</url>
-          <line>28</line>
+          <line>31</line>
           <option name="timeStamp" value="73" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/walletssi/Wallet.java</url>
-          <line>249</line>
-          <option name="timeStamp" value="80" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.util.ServiceConfigurationError" package="java.util" />

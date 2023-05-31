@@ -1,22 +1,16 @@
 package org.example.walletssi.key.utils;
 
 import com.google.crypto.tink.subtle.Hex;
-import com.nimbusds.jose.jwk.Curve;
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.KeyUse;
-import com.nimbusds.jose.jwk.OctetKeyPair;
+import com.nimbusds.jose.jwk.*;
 import com.nimbusds.jose.util.Base64URL;
-import org.bouncycastle.jcajce.provider.digest.SHA256;
 import org.example.walletssi.key.KeyHandlerEd25519;
 import org.example.walletssi.model.exception.UnsupportedKeyAlgorithm;
 
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
+import java.security.*;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
-import java.util.Base64;
 
 public class KeyUtils {
     public static byte[] hashSHA256(byte[] input){
@@ -42,12 +36,27 @@ public class KeyUtils {
             return publicKeyEC25519ToJwk(publicKey);
         }
         if(publicKey.getAlgorithm().equals("RSA")){
-            return null;
+            return publicKeyRSAToJWK(publicKey.getEncoded());
         }
         if(publicKey.getAlgorithm().equals("other")){
             return null;
         }
         throw new UnsupportedKeyAlgorithm("The key type " + publicKey.getAlgorithm() + " is not supported");
+    }
+
+    private static JWK publicKeyRSAToJWK(byte[] publicKeyBytes) {
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+            RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(keySpec);
+
+            JWK jwk = new RSAKey.Builder(publicKey)
+                    .build();
+
+            return jwk;
+        } catch (Exception e){
+            throw new RuntimeException();
+        }
     }
 
     private static OctetKeyPair publicKeyEC25519ToJwk(PublicKey publicKey){
@@ -62,20 +71,11 @@ public class KeyUtils {
                 .keyUse(KeyUse.SIGNATURE)
                 .build();
 
-
-        try {
-            //System.out.println(Arrays.toString(jwk.toPublicJWK().toPublicKey().getEncoded()));
-            OctetKeyPair ocp = OctetKeyPair.parse(jwk.toJSONString());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        //return jwk.toPublicJWK().toJSONString();
         return jwk;
     }
 
 
     public static PublicKey publicJwkToKeyEC25519(OctetKeyPair okp){
-        PublicKey publicKey;
         byte[] decoded = okp.getDecodedX();
         return new KeyHandlerEd25519.PublicKeyEd25519(decoded);
     }

@@ -1,6 +1,7 @@
 package org.example.walletssi.model.vc.signature;
 
 import com.danubetech.verifiablecredentials.VerifiableCredential;
+import com.danubetech.verifiablecredentials.VerifiablePresentation;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.OctetKeyPair;
 import foundation.identity.jsonld.JsonLDObject;
@@ -8,8 +9,12 @@ import info.weboftrust.ldsignatures.verifier.Ed25519Signature2020LdVerifier;
 import info.weboftrust.ldsignatures.verifier.LdVerifier;
 import info.weboftrust.ldsignatures.verifier.RsaSignature2018LdVerifier;
 import org.didcommx.didcomm.common.VerificationMaterialFormat;
+import org.didcommx.didcomm.diddoc.DIDDoc;
 import org.didcommx.didcomm.diddoc.VerificationMethod;
 import org.example.walletssi.key.utils.KeyUtils;
+import org.example.walletssi.model.didUtils.DIDDocImp;
+import org.example.walletssi.model.didUtils.DIDDocUtils;
+import org.example.walletssi.model.handlers.config.DidMethodHandlerConfig;
 
 import java.security.KeyFactory;
 import java.security.PublicKey;
@@ -19,6 +24,7 @@ import java.text.ParseException;
 
 public class VerifySignature {
 
+    /*
     public static boolean tryAllSignatureMethodLD(VerifiableCredential vc, PublicKey publicKey){
         LdVerifier ldVerifier;
 
@@ -32,7 +38,7 @@ public class VerifySignature {
 
         //RSA
         try {
-            // Convierte la clave pública a partir del arreglo de bytes
+            // Convierte la clave pública a partir del array de bytes
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey.getEncoded());
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             PublicKey publicKey2 = keyFactory.generatePublic(keySpec);
@@ -52,7 +58,7 @@ public class VerifySignature {
 
         return false;
     }
-
+*/
 
     public static boolean tryVerify(VerificationMethod v, JsonLDObject credential){
         VerificationMaterialFormat format = v.getVerificationMaterial().getFormat();
@@ -66,6 +72,7 @@ public class VerifySignature {
                 }
             }
 
+            //Soporte a otros métodos de clave
 
         }
         return false;
@@ -85,6 +92,21 @@ public class VerifySignature {
             RsaSignature2018LdVerifier verifier = new RsaSignature2018LdVerifier(publicKey);
             return verifier.verify(credential);
         } catch (Exception e) {}
+        //añadir otros tipos de clave a futuro
+        return false;
+    }
+
+    public static boolean verifyJsonLD(String did, JsonLDObject jsonLDObject, String didDoc){
+        DIDDocImp didDocImp = DIDDocImp.Companion.fromJson(didDoc);
+        DIDDoc doc = new DIDDoc(didDocImp.getDid(), didDocImp.getKeyAgreements(), didDocImp.getAuthentications(), didDocImp.getVerificationMethods(), didDocImp.getDidCommServices());
+        if(!doc.getDid().equals(did))
+            return false;
+
+
+        for(VerificationMethod v: doc.getVerificationMethods()){
+            if(VerifySignature.tryVerify(v, jsonLDObject))
+                return true;
+        }
         return false;
     }
 }

@@ -37,42 +37,29 @@ import org.springframework.web.client.RestTemplate;
 public class EBSIMethodHandler implements DidMethodHandler {
     public final String ebsi;
 
-    private String didRegistry = "localhost:9090";
+    private String didRegistry = "http://localhost:8080";
 
-    private File dir = new File("data/did");
+    private String schemaRegistry = "http://localhost:8080";
+
+    private File dir = new File("data/did/created");
+
+    private DIDDocResolver resolver;
 
 
     //CONSTRUCTORS
-    public EBSIMethodHandler(){
-        this("ebsi");
-    }
-
-    public EBSIMethodHandler(String ebsi){
-        this(ebsi, "data/did/created");
-    }
-
-    public EBSIMethodHandler(String ebsi, String path){
-        if(!ebsi.matches("ebsi[A-Za-z0-9]*")){
-            throw new IllegalArgumentException("Invalid EBSI network name");
-        }
-        this.ebsi = ebsi;
-        this.dir = new File(path);
-        if(!dir.isDirectory() || !dir.canRead() || !dir.canWrite()){
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public EBSIMethodHandler(EBSIMethodHandlerConfig methodConfig){
-        EBSIMethodHandlerConfig config = (EBSIMethodHandlerConfig) methodConfig;
+    public EBSIMethodHandler(EBSIMethodHandlerConfig config){
         this.ebsi = config.getEbsiMethod();
         if(!ebsi.matches("ebsi[A-Za-z0-9]*")){
             throw new IllegalArgumentException("Invalid EBSI network name. Must start with \"ebsi\".");
         }
         if(config.getDidStorePath() != null)
             this.dir = new File(config.getDidStorePath());
-        if(!dir.isDirectory() || !dir.canRead() || !dir.canWrite()){
-            throw new IllegalArgumentException();
+        if(!this.dir.isDirectory())
+            this.dir.mkdirs();
+        if(!dir.canRead() || !dir.canWrite()){
+            throw new IllegalArgumentException("Sin permisos necesarios para usar el directorio " + dir);
         }
+        resolver = new EBSIDIDDocResolver(config);
 
     }
 
@@ -84,10 +71,17 @@ public class EBSIMethodHandler implements DidMethodHandler {
 
     @Override
     public DIDDocResolver getResolver() {
-        return null;
+        return resolver;
+    }
+
+    @Override
+    public String getDIDRegistry() {
+        return didRegistry;
     }
 
     public Class<?> getConfigClass(){ return EBSIMethodHandlerConfig.class; }
+
+    public String getSchemaRegistry(){ return schemaRegistry; }
 
     @Override
     public String genDID(PublicKey publicKey){
@@ -95,16 +89,17 @@ public class EBSIMethodHandler implements DidMethodHandler {
         //System.out.println(generateDidDocument(did, (KeyHandlerEd25519.PublicKeyEd25519) publicKey));
 
         String didDoc = generateDidDocument(did, publicKey);
-        try {
-            if(registerDID(did, didDoc)){
-                storeDID(did, didDoc);
-            }
-        } catch (RuntimeException e){
+
+
+        if(registerDID(did, didDoc)){
             storeDID(did, didDoc);
+            return did;
         }
 
+        throw new RuntimeException("No se ha podido registrar el DID");
 
-        return did;
+
+
     }
 
     private byte[] ebsiSubject(){
@@ -168,8 +163,7 @@ public class EBSIMethodHandler implements DidMethodHandler {
     public boolean registerDID(String did, String didDocument){
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Boolean> response =
-                restTemplate.postForEntity(didRegistry, (Object) didDocument, Boolean.class, (Object) null);
-
+                restTemplate.postForEntity(didRegistry + "/register?did=" + did, didDocument, Boolean.class, (Object) null);
         return response.getBody().booleanValue();
     }
 

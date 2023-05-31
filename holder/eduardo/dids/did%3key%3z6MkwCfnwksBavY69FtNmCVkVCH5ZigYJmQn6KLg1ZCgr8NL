@@ -1,0 +1,17 @@
+{
+  "@context" : [ "https://www.w3.org/ns/did/v1" ],
+  "id" : "did:key:z6MkwCfnwksBavY69FtNmCVkVCH5ZigYJmQn6KLg1ZCgr8NL",
+  "verificationMethod" : [ {
+    "type" : "Ed25519VerificationType2020",
+    "id" : "did:key:z6MkwCfnwksBavY69FtNmCVkVCH5ZigYJmQn6KLg1ZCgr8NL#z6MkwCfnwksBavY69FtNmCVkVCH5ZigYJmQn6KLg1ZCgr8NL",
+    "publicKeyJwk" : {
+      "kty" : "OKP",
+      "use" : "sig",
+      "crv" : "Ed25519",
+      "kid" : "3b3ab4477f73f36958a1019bccf588ae9a552b14e382296b2e516aac607e66c9",
+      "x" : "-NnRJOIJiFDRe4XOupRrtksBm00QTxVIatH6gCMLSsk"
+    }
+  } ],
+  "authentication" : [ "did:key:z6MkwCfnwksBavY69FtNmCVkVCH5ZigYJmQn6KLg1ZCgr8NL#z6MkwCfnwksBavY69FtNmCVkVCH5ZigYJmQn6KLg1ZCgr8NL" ],
+  "assertionMethod" : [ "did:key:z6MkwCfnwksBavY69FtNmCVkVCH5ZigYJmQn6KLg1ZCgr8NL#z6MkwCfnwksBavY69FtNmCVkVCH5ZigYJmQn6KLg1ZCgr8NL" ]
+}

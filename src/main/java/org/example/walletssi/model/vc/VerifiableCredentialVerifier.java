@@ -1,53 +1,43 @@
 package org.example.walletssi.model.vc;
 
-import com.danubetech.keyformats.crypto.ByteVerifier;
-import com.danubetech.keyformats.crypto.impl.Ed25519_EdDSA_PrivateKeySigner;
-import com.danubetech.keyformats.crypto.impl.Ed25519_EdDSA_PublicKeyVerifier;
 import com.danubetech.verifiablecredentials.VerifiableCredential;
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.OctetKeyPair;
-import foundation.identity.did.DIDDocument;
-import foundation.identity.did.validation.Validation;
-import foundation.identity.jsonld.JsonLDException;
-import info.weboftrust.ldsignatures.verifier.Ed25519Signature2020LdVerifier;
-import info.weboftrust.ldsignatures.verifier.LdVerifier;
-import info.weboftrust.ldsignatures.verifier.RsaSignature2018LdVerifier;
-import io.ipfs.multibase.Base58;
-import org.didcommx.didcomm.common.VerificationMaterial;
-import org.didcommx.didcomm.common.VerificationMaterialFormat;
-import org.didcommx.didcomm.common.VerificationMethodType;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.github.fge.jsonschema.core.report.ProcessingMessage;
+import com.github.fge.jsonschema.core.report.ProcessingReport;
+import com.github.fge.jsonschema.main.JsonSchema;
+import com.github.fge.jsonschema.main.JsonSchemaFactory;
+import foundation.identity.jsonld.JsonLDObject;
 import org.didcommx.didcomm.diddoc.DIDDoc;
 import org.didcommx.didcomm.diddoc.DIDDocResolver;
 import org.didcommx.didcomm.diddoc.VerificationMethod;
-import org.example.walletssi.key.utils.KeyUtils;
 import org.example.walletssi.model.DidMethod;
-import org.example.walletssi.model.didUtils.DIDDocImp;
-import org.example.walletssi.model.didUtils.DIDDocUtils;
 import org.example.walletssi.model.didUtils.DIDParser;
 import org.example.walletssi.model.handlers.config.DidMethodHandlerConfig;
-import org.example.walletssi.model.resolver.DIDResolver;
 import org.example.walletssi.model.vc.signature.VerifySignature;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.security.GeneralSecurityException;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.PublicKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.X509EncodedKeySpec;
-import java.text.ParseException;
-import java.util.List;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.net.URI;
+import java.util.Iterator;
+import java.util.Map;
 
 public class VerifiableCredentialVerifier {
 
-    public boolean verify(String vc){
-        //com.github.fge.jsonschema.main.JsonSchemaFactory.newBuilder().
-        return false;
+    public boolean verify(String vc, DidMethodHandlerConfig config, boolean fromTrustedRegistry){
+        VerifiableCredential credential = VerifiableCredential.fromJson(vc);
+        return verify(credential, config, fromTrustedRegistry);
     }
 
-    private String getSchema(String schema){
-        return null;
+    public boolean verify(VerifiableCredential vc, DidMethodHandlerConfig config, boolean fromTrustedRegistry){
+        String schemaRegistry = (DidMethod.getHandler(DIDParser.parseDID(vc.getIssuer().toString()), config)).getSchemaRegistry();
+        if(!validateSchema(schemaRegistry, vc, fromTrustedRegistry))
+            return false;
+        return verifyWithoutRegistry(vc, config);
     }
 
     public boolean verifyWithoutRegistry(String vc, DidMethodHandlerConfig config){
@@ -66,13 +56,57 @@ public class VerifiableCredentialVerifier {
         if(doc == null)
             return false;
 
-        System.out.println(doc.toString());
-
         for(VerificationMethod v: doc.getVerificationMethods()){
             if(VerifySignature.tryVerify(v, credential))
                 return true;
         }
         return false;
+    }
+
+    protected static boolean validateSchema(String registry, JsonLDObject json, boolean fromTrustedRegistry){
+        if(registry == null && fromTrustedRegistry) //Si se requiere que se pida del registro y no existe
+            return false;
+        URI schemaId = getCredentialSchemaId(json);
+        if(schemaId == null) //Si la credencial no tiene schema
+            return false;
+
+        if(fromTrustedRegistry && !schemaId.toString().startsWith(registry))
+            return false;
+
+        RestTemplate restTemplate = new RestTemplate();
+        String schema = restTemplate.getForObject(schemaId, String.class);
+
+        return validateJSONSchema(json.toJson(), schema);
+    }
+
+
+    protected static boolean validateJSONSchema (String json, String schema){
+
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonSchemaFactory schemaFactory = JsonSchemaFactory.byDefault();
+        try {
+            JsonNode jsonNode = objectMapper.readTree(json);
+            JsonNode schemaNode = objectMapper.readTree(schema);
+            JsonSchema schemaJson = schemaFactory.getJsonSchema(schemaNode);
+            ProcessingReport report = schemaJson.validate(jsonNode);
+            return report.isSuccess();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    private static URI getCredentialSchemaId(JsonLDObject json){
+        try {
+            Map<String, Object> credentialSchema = (Map<String, Object>) json.getJsonObject().get("credentialSchema");
+            return URI.create((String) credentialSchema.get("id"));
+        } catch (Exception e){
+            return null;
+        }
+
+        //return json.getJsonObject().get("credentialSchema.id").toString();
     }
 
 }
