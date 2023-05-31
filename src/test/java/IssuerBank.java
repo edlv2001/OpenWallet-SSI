@@ -1,11 +1,12 @@
 import com.danubetech.verifiablecredentials.VerifiablePresentation;
-import org.example.walletssi.Wallet;
-import org.example.walletssi.init.WalletConfiguration;
-import org.example.walletssi.key.KeyType;
-import org.example.walletssi.key.exception.IncorrectPasswordException;
-import org.example.walletssi.model.DidMethod;
-import org.example.walletssi.model.handlers.config.EBSIMethodHandlerConfig;
+import es.edu.walletssi.Wallet;
+import es.edu.walletssi.init.WalletConfiguration;
+import es.edu.walletssi.key.KeyType;
+import es.edu.walletssi.key.exception.IncorrectPasswordException;
+import es.edu.walletssi.model.DidMethod;
+import es.edu.walletssi.model.handlers.config.EBSIMethodHandlerConfig;
 
+import java.net.URI;
 import java.security.KeyPair;
 import java.time.Instant;
 import java.util.Date;
@@ -55,13 +56,13 @@ public class IssuerBank implements Issuer{
 
     public String issueCreditScore(String vpID, String didHolder){
         VerifiablePresentation vp = VerifiablePresentation.fromJson(vpID);
-        if(!vp.getHolder().toString().equals(did) ||
-                !vp.getVerifiableCredential().getCredentialSubject().getId().toString().equals(did)){
+        if(!vp.getHolder().toString().equals(didHolder) ||
+                !vp.getVerifiableCredential().getCredentialSubject().getId().toString().equals(didHolder)){
             return null;
         }
         Map<String, Object> claims = vp.getVerifiableCredential().getCredentialSubject().getClaims();
         claims.put("creditScore", searchScoreMockUp());
-        return wallet.issueVC(claims, did, kp, didHolder, Date.from(Instant.now().plusSeconds(7200)), false);
+        return wallet.issueVC(URI.create("https://schema.affinidi.com/CreditScoreV1-0.json"), "Credit Score",claims, did, kp, didHolder, Date.from(Instant.now().plusSeconds(7200)), false);
     }
 
     private int searchScoreMockUp(){
@@ -69,13 +70,13 @@ public class IssuerBank implements Issuer{
     }
 
 
-    public String giveVC(String schema, String did, String loginVC){
+    public String giveVC(URI schema, String did, String loginVC){
         //LOGIN
-        if(!wallet.verifyVP(loginVC, false)) return null;
+        if(loginVC == null || !wallet.verifyVPWithOnlyVCSchema(loginVC, false)) return null;
 
         //ISSUANCE FROM AVAILABLE SCHEMAS
-        if(schema.equals("https://schema.affinidi.com/CreditScoreV1-0.json"))
-            return issueCreditScore(loginVC, did);
+        if(schema.toString().equals("https://schema.affinidi.com/CreditScoreV1-0.json"))
+            return issueCreditScore(loginVC,did);
         return null;
     }
 

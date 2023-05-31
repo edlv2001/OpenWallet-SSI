@@ -1,11 +1,9 @@
-import org.example.walletssi.Wallet;
-import org.example.walletssi.init.WalletConfiguration;
-import org.example.walletssi.key.KeyType;
-import org.example.walletssi.key.exception.IncorrectPasswordException;
-import org.example.walletssi.model.DidMethod;
-import org.example.walletssi.model.handlers.config.DefaultMethodHandlerConfig;
+import es.edu.walletssi.Wallet;
+import es.edu.walletssi.init.WalletConfiguration;
+import es.edu.walletssi.model.DidMethod;
+import es.edu.walletssi.model.handlers.config.DefaultMethodHandlerConfig;
 
-import java.security.KeyPair;
+import java.net.URI;
 
 public class Verifier {
 
@@ -27,8 +25,13 @@ public class Verifier {
     }
 
 
-    public boolean askForVC(Holder holder){
-        String vp = holder.givePresentation("https://schema.affinidi.com/CreditScoreV1-0.json");
-        return wallet.verifyVP(vp, false);
+    public void askForVC(Holder holder){
+        String vp = holder.givePresentation(URI.create("https://schema.affinidi.com/CreditScoreV1-0.json"));
+        System.out.println(name + " ha obtenido la presentacion verificable: \n" + vp);
+        if(wallet.verifyVPWithOnlyVCSchema(vp, false)){
+            System.out.println(name + " ha verificado que la presentacion es auténtica");
+        } else {
+            System.out.println(name + " ha verificado que la presentacion no es auténtica");
+        }
     }
 }

@@ -1,11 +1,11 @@
-import com.danubetech.verifiablecredentials.VerifiablePresentation;
-import org.example.walletssi.Wallet;
-import org.example.walletssi.init.WalletConfiguration;
-import org.example.walletssi.key.KeyType;
-import org.example.walletssi.key.exception.IncorrectPasswordException;
-import org.example.walletssi.model.DidMethod;
-import org.example.walletssi.model.handlers.config.EBSIMethodHandlerConfig;
+import es.edu.walletssi.Wallet;
+import es.edu.walletssi.init.WalletConfiguration;
+import es.edu.walletssi.key.KeyType;
+import es.edu.walletssi.key.exception.IncorrectPasswordException;
+import es.edu.walletssi.model.DidMethod;
+import es.edu.walletssi.model.handlers.config.EBSIMethodHandlerConfig;
 
+import java.net.URI;
 import java.security.KeyPair;
 import java.time.Instant;
 import java.util.Date;
@@ -57,7 +57,7 @@ public class IssuerPolice implements Issuer{
         Map<String, Object> claims = new HashMap<>();
         claims.put("name", getName());
         claims.put("familyName", getFamiliyName());
-        return wallet.issueVC(claims, did, kp, didHolder, Date.from(Instant.now().plusSeconds(7200)), false);
+        return wallet.issueVC(URI.create("https://schema.affinidi.com/IDReducedV1-0.json"), "VerifiableID",claims, did, kp, didHolder, Date.from(Instant.now().plusSeconds(7200)), false);
     }
 
     private boolean validateJWTMockUP(String jwt){ return true; }
@@ -69,17 +69,16 @@ public class IssuerPolice implements Issuer{
     }
 
     private String getFamiliyName(){
-        String[] familyNameList = {};
+        String[] familyNameList = {"Garcia", "Rodriguez", "Gonzalez", "Fernandez", "Lopez", "Martinez", "Sanchez", "Perez", "Gomez", "Martin", "Jimenez", "Hernandez", "Ruiz", "Diaz", "Moreno", "Muñoz", "Alvarez", "Romero", "Gutierrez", "Alonso", "Navarro", "Torres", "Dominguez", "Ramos", "Vazquez", "Ramirez", "Gil", "Serrano", "Morales", "Molina", "Blanco", "Suarez", "Castro", "Ortega", "Delgado", "Ortiz", "Marin", "Rubio", "Nuñez", "Medina", "Sanz", "Castillo", "Iglesias", "Cortes", "Garrido", "Santos", "Guerrero", "Lozano", "Cano", "Cruz", "Mendez", "Flores", "Prieto", "Herrera", "Peña", "Leon", "Marquez", "Cabrera", "Gallego", "Calvo", "Vidal", "Campos", "Reyes", "Vega", "Fuentes", "Carrasco", "Diez", "Aguilar", "Caballero", "Nieto", "Santana", "Vargas", "Pascual", "Gimenez", "Herrero", "Hidalgo", "Montero", "Lorenzo", "Santiago", "Benitez", "Duran", "Ibañez", "Arias", "Mora", "Ferrer", "Carmona", "Vicente", "Rojas", "Soto", "Crespo", "Roman", "Pastor", "Velasco", "Parra", "Saez", "Moya", "Bravo", "Rivera", "Gallardo", "Soler"};
         return familyNameList[(int)(Math.random()* familyNameList.length)];
     }
 
 
-    public String giveVC(String schema, String did, String mockUpJWT){
+    public String giveVC(URI schema, String did, String mockUpJWT){
         //LOGIN
         if(!validateJWTMockUP(mockUpJWT)) return null;
-
         //ISSUANCE FROM AVAILABLE SCHEMAS
-        if(schema.equals("https://schema.affinidi.com/IDReducedV1-0.json"))
+        if(schema.toString().equals("https://schema.affinidi.com/IDReducedV1-0.json"))
             return issueID(did);
         return null;
     }
