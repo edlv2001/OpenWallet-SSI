@@ -17,41 +17,25 @@ import java.text.ParseException;
 
 public class VerifySignature {
 
-    /*
-    public static boolean tryAllSignatureMethodLD(VerifiableCredential vc, PublicKey publicKey){
-        LdVerifier ldVerifier;
+    public static boolean verifyJsonLD(String did, JsonLDObject jsonLDObject, String didDoc){
+        DIDDocImp didDocImp = DIDDocImp.Companion.fromJson(didDoc);
+        DIDDoc doc = new DIDDoc(
+                didDocImp.getDid(),
+                didDocImp.getKeyAgreements(),
+                didDocImp.getAuthentications(),
+                didDocImp.getVerificationMethods(),
+                didDocImp.getDidCommServices()
+        );
+        if(!doc.getDid().equals(did))
+            return false;
 
-        //ED25519
-        ldVerifier = new Ed25519Signature2020LdVerifier(publicKey.getEncoded());
-        try {
-            if(ldVerifier.verify(vc, vc.getLdProof()))
+
+        for(VerificationMethod v: doc.getVerificationMethods()){
+            if(VerifySignature.tryVerify(v, jsonLDObject))
                 return true;
-        } catch (Exception e) {}
-
-
-        //RSA
-        try {
-            // Convierte la clave pública a partir del array de bytes
-            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey.getEncoded());
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            PublicKey publicKey2 = keyFactory.generatePublic(keySpec);
-
-            if (publicKey2 instanceof RSAPublicKey) {
-                RSAPublicKey rsaPublicKey = (RSAPublicKey) publicKey2;
-                ldVerifier = new RsaSignature2018LdVerifier(rsaPublicKey);
-                return ldVerifier.verify(vc, vc.getLdProof());
-            }
-        } catch (Exception e) {}
-
-        // ADD MORE
-
-
-
-        //
-
+        }
         return false;
     }
-*/
 
     public static boolean tryVerify(VerificationMethod v, JsonLDObject credential){
         VerificationMaterialFormat format = v.getVerificationMaterial().getFormat();
@@ -89,17 +73,5 @@ public class VerifySignature {
         return false;
     }
 
-    public static boolean verifyJsonLD(String did, JsonLDObject jsonLDObject, String didDoc){
-        DIDDocImp didDocImp = DIDDocImp.Companion.fromJson(didDoc);
-        DIDDoc doc = new DIDDoc(didDocImp.getDid(), didDocImp.getKeyAgreements(), didDocImp.getAuthentications(), didDocImp.getVerificationMethods(), didDocImp.getDidCommServices());
-        if(!doc.getDid().equals(did))
-            return false;
 
-
-        for(VerificationMethod v: doc.getVerificationMethods()){
-            if(VerifySignature.tryVerify(v, jsonLDObject))
-                return true;
-        }
-        return false;
-    }
 }
